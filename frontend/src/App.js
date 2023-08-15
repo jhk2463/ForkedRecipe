@@ -4,24 +4,13 @@ import { AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { GiKnifeFork } from "react-icons/gi";
 
-import Category from "./components/Category";
-import Search from "./components/Search";
-
 import Pages from "./pages/Pages";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Cuisine from "./pages/Cuisine";
-import Searched from "./pages/Searched";
-import Recipe from "./pages/Recipe";
+import Register from "./pages/Register";
 
 import "./app.css";
-import { useEffect } from "react";
 
 function App() {
-  useEffect(() => {
-    console.log(Window.history);
-  }, [Window.history]);
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -34,7 +23,8 @@ function App() {
         </Nav>
         <Routes>
           <Route path="/*" element={<Pages />} />
-          <Route path="/login/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </BrowserRouter>
     </div>

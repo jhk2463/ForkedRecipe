@@ -6,7 +6,6 @@ import Home from "./Home";
 import Cuisine from "./Cuisine";
 import Searched from "./Searched";
 import Recipe from "./Recipe";
-import Login from "./Login";
 
 import Category from "../components/Category";
 import Search from "../components/Search";
