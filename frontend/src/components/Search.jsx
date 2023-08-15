@@ -19,6 +19,7 @@ function Search() {
         <input
           type="text"
           value={input}
+          placeholder="Start your search"
           onChange={(e) => setInput(e.target.value)}
         />
       </div>
@@ -42,6 +43,9 @@ const FormStyle = styled.form`
     border: none;
     border-radius: 1rem;
     outline: none;
+  }
+  ::placeholder {
+    color: white;
   }
   svg {
     position: absolute;
