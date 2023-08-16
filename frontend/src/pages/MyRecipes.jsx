@@ -30,27 +30,30 @@ function MyRecipes() {
   };
 
   return (
-    <Grid
+    <motion.div
       animate={{ opacity: 1 }}
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      {myRecipes.map((recipe) => {
-        return (
-          <RecipeCard
-            key={recipe._id}
-            title={recipe.title}
-            image={recipe.imageUrl}
-            id={recipe._id}
-          />
-        );
-      })}
-    </Grid>
+      <h2>My Recipes</h2>
+      <Grid>
+        {myRecipes.map((recipe) => {
+          return (
+            <RecipeCard
+              key={recipe._id}
+              title={recipe.title}
+              image={recipe.imageUrl}
+              id={recipe._id}
+            />
+          );
+        })}
+      </Grid>
+    </motion.div>
   );
 }
 
-const Grid = styled(motion.div)`
+const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 2fr));
   column-gap: 2rem;

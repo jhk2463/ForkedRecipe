@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { BsPlusCircleFill } from "react-icons/bs";
+import { TiDeleteOutline } from "react-icons/ti";
 
 import { useGetUserId } from "../hooks/useGetUserId";
 
@@ -43,6 +44,12 @@ function Create() {
     setRecipe({ ...recipe, ingredients: [...recipe.ingredients, ""] });
   };
 
+  const deleteIngredient = (idx) => {
+    const ingredients = recipe.ingredients;
+    ingredients.splice(idx, 1);
+    setRecipe({ ...recipe, ingredients: ingredients });
+  };
+
   const handleInstructionChange = (event, idx) => {
     const { value } = event.target;
     const instructions = recipe.instructions;
@@ -54,13 +61,19 @@ function Create() {
     setRecipe({ ...recipe, instructions: [...recipe.instructions, ""] });
   };
 
+  const deleteInstruction = (idx) => {
+    const instructions = recipe.instructions;
+    instructions.splice(idx, 1);
+    setRecipe({ ...recipe, instructions: instructions });
+  };
+
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await nativeApi.post("/recipes", recipe);
       console.log(response);
       alert("Recipe created");
-      navigate("/");
+      navigate("/myrecipes");
     } catch (error) {
       console.error(error);
     }
@@ -106,13 +119,18 @@ function Create() {
             <BsPlusCircleFill />
           </button>
           {recipe.ingredients.map((ingredient, idx) => (
-            <input
-              key={idx}
-              type="text"
-              id="ingredients"
-              value={ingredient}
-              onChange={(event) => handleIngredientChange(event, idx)}
-            />
+            <InputStyle>
+              <input
+                key={idx}
+                type="text"
+                id="ingredients"
+                value={ingredient}
+                onChange={(event) => handleIngredientChange(event, idx)}
+              />
+              <button onClick={() => deleteIngredient(idx)} type="button">
+                <TiDeleteOutline />
+              </button>
+            </InputStyle>
           ))}
         </LCol>
         <RCol>
@@ -129,13 +147,18 @@ function Create() {
             <BsPlusCircleFill />
           </button>
           {recipe.instructions.map((instructions, idx) => (
-            <input
-              key={idx}
-              type="text"
-              id="instructions"
-              value={instructions}
-              onChange={(event) => handleInstructionChange(event, idx)}
-            />
+            <InputStyle>
+              <input
+                key={idx}
+                type="text"
+                id="instructions"
+                value={instructions}
+                onChange={(event) => handleInstructionChange(event, idx)}
+              />
+              <button onClick={() => deleteInstruction(idx)} type="button">
+                <TiDeleteOutline />
+              </button>
+            </InputStyle>
           ))}
         </RCol>
       </FormStyle>
@@ -207,6 +230,23 @@ const LCol = styled.div`
 `;
 const RCol = styled.div`
   width: 50%;
+`;
+
+const InputStyle = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  input {
+    margin: 0;
+    padding-right: 3rem;
+  }
+  button {
+    margin: 0;
+    color: white;
+    border: none;
+    background: transparent;
+    transform: translate(-2rem, 0) scale(1.4);
+  }
 `;
 
 const SButton = styled.button`

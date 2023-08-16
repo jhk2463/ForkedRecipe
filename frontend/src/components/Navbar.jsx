@@ -1,11 +1,19 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { GiKnifeFork } from "react-icons/gi";
 import { useCookies } from "react-cookie";
 import { RiArrowDownSFill } from "react-icons/ri";
 
 function Navbar() {
-  const [cookies, _] = useCookies(["access_token"]);
+  const [cookies, setCookies] = useCookies(["access_token"]);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    setCookies("access_token", "");
+    window.localStorage.removeItem("userId");
+    window.localStorage.removeItem("displayName");
+  };
+
   return (
     <NavWrapper>
       <Nav>
@@ -42,7 +50,8 @@ function Navbar() {
                 Profile
               </SLink>
               <SLink
-                to={"/"}
+                to={"/auth/login"}
+                onClick={logout}
                 style={{ fontSize: "1rem", textDecoration: "underline" }}
               >
                 Logout
@@ -80,14 +89,14 @@ const Logo = styled.div`
   }
 `;
 
-const LogoLink = styled(Link)`
+const LogoLink = styled(NavLink)`
   text-decoration: none;
   font-size: 1.3rem;
   font-weight: 400;
   font-family: "Borel";
 `;
 
-const SLink = styled(Link)`
+const SLink = styled(NavLink)`
   padding-top: 0.5rem;
   text-decoration: none;
   font-size: 1.2rem;
