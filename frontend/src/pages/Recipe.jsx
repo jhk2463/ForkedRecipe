@@ -4,9 +4,6 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 
-import Category from "../components/Category";
-import Search from "../components/Search";
-
 const spoonApi = axios.create({
   baseURL: "https://api.spoonacular.com/recipes",
 });

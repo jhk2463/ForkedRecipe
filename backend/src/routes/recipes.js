@@ -39,6 +39,7 @@ router.get("/recipes/:userId", async (req, res) => {
     const myRecipes = await Recipe.find({
       _id: { $in: user.myRecipes },
     });
+    console.log(myRecipes);
     res.json({ myRecipes: myRecipes });
   } catch (err) {
     res.json(err);

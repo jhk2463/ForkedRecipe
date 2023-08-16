@@ -3,8 +3,6 @@ import { motion } from "framer-motion";
 
 import Popular from "../components/Popular";
 import Korean from "../components/Korean";
-import Category from "../components/Category";
-import Search from "../components/Search";
 
 function Home() {
   return (

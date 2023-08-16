@@ -4,8 +4,9 @@ import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useGetUserId } from "../hooks/useGetUserId";
 import { BsPlusCircleFill } from "react-icons/bs";
+
+import { useGetUserId } from "../hooks/useGetUserId";
 
 const nativeApi = axios.create({
   baseURL: "http://localhost:3001",
@@ -153,7 +154,6 @@ const FormStyle = styled.form`
     margin-bottom: 1rem;
   }
   h4 {
-    margin: 0;
     margin-bottom: 1rem;
   }
   label {

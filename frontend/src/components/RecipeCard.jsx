@@ -14,6 +14,8 @@ function RecipeCard(props) {
 }
 
 const Card = styled.div`
+  max-width: 20rem;
+  max-height: 15rem;
   img {
     width: 100%;
     border-radius: 2rem;

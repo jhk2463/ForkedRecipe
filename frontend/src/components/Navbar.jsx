@@ -18,7 +18,7 @@ function Navbar() {
           <SLink to={!cookies.access_token ? "/auth/login" : "/create"}>
             Create Recipe
           </SLink>
-          <SLink to={!cookies.access_token ? "/auth/login" : "/"}>
+          <SLink to={!cookies.access_token ? "/auth/login" : "/myrecipes"}>
             My Recipes
           </SLink>
           <SLink to={!cookies.access_token ? "/auth/login" : "/"}>
@@ -115,14 +115,16 @@ const Menu = styled.div`
 `;
 
 const Dropdown = styled.div`
+  width: 11rem;
+  text-align: right;
   div {
-    background-color: white;
+    text-align: right;
+    width: 11rem;
     position: absolute;
     display: none;
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
-    transform: translate(0, 0);
   }
   &:hover div {
     display: flex;
