@@ -17,6 +17,7 @@ function Pages() {
       <Search />
       <Category />
       <AnimatePresence mode="wait">
+        {/* {location.pathname.split("/")[1] !== "recipe" && <Category />} */}
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/cuisine/:type" element={<Cuisine />} />

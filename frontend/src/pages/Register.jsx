@@ -35,6 +35,7 @@ function Register() {
   return (
     <FormStyle onSubmit={onSubmit}>
       <h2>Sign up</h2>
+      <h4>to start creating, sharing, and saving</h4>
       <label htmlFor="displayName">Display Name</label>
       <input
         type="text"
@@ -70,7 +71,9 @@ const FormStyle = styled.form`
     position: relative;
     width: 100%;
   }
-  h2 {
+
+  h4 {
+    margin: 0;
     margin-bottom: 1rem;
   }
   label {

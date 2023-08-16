@@ -19,6 +19,7 @@ router.get("/recipes", async (req, res) => {
 //Create a recipe
 router.post("/recipes", async (req, res) => {
   const recipe = req.body;
+  console.log(recipe);
   try {
     const user = await User.findById(recipe.owner);
     const newRecipe = new Recipe(recipe);
