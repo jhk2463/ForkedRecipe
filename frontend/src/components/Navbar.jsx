@@ -29,7 +29,7 @@ function Navbar() {
           <SLink to={!cookies.access_token ? "/auth/login" : "/myrecipes"}>
             My Recipes
           </SLink>
-          <SLink to={!cookies.access_token ? "/auth/login" : "/"}>
+          <SLink to={!cookies.access_token ? "/auth/login" : "/savedrecipes"}>
             Saved Recipes
           </SLink>
         </Menu>
@@ -43,12 +43,12 @@ function Navbar() {
               <RiArrowDownSFill />
             </SLink>
             <div>
-              <SLink
+              {/* <SLink
                 to={"/"}
                 style={{ fontSize: "1rem", textDecoration: "underline" }}
               >
                 Profile
-              </SLink>
+              </SLink> */}
               <SLink
                 to={"/auth/login"}
                 onClick={logout}

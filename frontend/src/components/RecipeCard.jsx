@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function RecipeCard(props) {
   return (
     <Card>
-      <Link to={`/recipe/${props.id}`}>
+      <Link to={`/recipe/${props.tag}/${props.id}`}>
         <img src={props.image} alt={props.title} />
         <h4>{props.title}</h4>
       </Link>
@@ -14,11 +14,11 @@ function RecipeCard(props) {
 }
 
 const Card = styled.div`
-  max-width: 20rem;
-  max-height: 20rem;
+  aspect-ratio: 4/3;
+
   img {
     width: 100%;
-    height: 70%;
+    height: 100%;
     border-radius: 2rem;
     object-fit: cover;
   }

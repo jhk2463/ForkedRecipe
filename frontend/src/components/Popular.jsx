@@ -10,10 +10,11 @@ const spoonApi = axios.create({
 });
 const SPOONACULAR_KEY = process.env.REACT_APP_SPOONACULAR_KEY;
 
-function Popular() {
+function Popular(props) {
   const [popular, setPopular] = useState([]);
 
   useEffect(() => {
+    console.log(props.savedRecipes);
     getPopular();
   }, []);
 
@@ -23,7 +24,7 @@ function Popular() {
       setPopular(JSON.parse(check));
     } else {
       const { data } = await spoonApi.get(
-        `/random?apiKey=${SPOONACULAR_KEY}&number=8`
+        `/random?apiKey=${SPOONACULAR_KEY}&number=12`
       );
       localStorage.setItem("popular", JSON.stringify(data.recipes));
       setPopular(data.recipes);
@@ -37,10 +38,11 @@ function Popular() {
       <Splide
         options={{
           perPage: 4,
-          arrows: false,
+          arrows: true,
           pagination: false,
           drag: "free",
           gap: "2rem",
+          padding: { left: "1.5rem", right: "1.5rem" },
         }}
       >
         {popular.map((recipe) => {
@@ -50,6 +52,12 @@ function Popular() {
                 title={recipe.title}
                 image={recipe.image}
                 id={recipe.id}
+                tag={"spoon"}
+                // saveRecipe={props.saveRecipe}
+                // savedRecipes={props.savedRecipes}
+                // isSaved={
+                //   props.savedRecipes.includes(`${recipe.id}`) ? true : false
+                // }
               />
             </SplideSlide>
           );

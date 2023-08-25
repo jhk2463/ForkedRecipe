@@ -10,7 +10,7 @@ const spoonApi = axios.create({
 });
 const SPOONACULAR_KEY = process.env.REACT_APP_SPOONACULAR_KEY;
 
-function Korean() {
+function Korean(props) {
   const [korean, setKorean] = useState([]);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ function Korean() {
       setKorean(JSON.parse(check));
     } else {
       const { data } = await spoonApi.get(
-        `/random?apiKey=${SPOONACULAR_KEY}&tags=korean&number=8`
+        `/random?apiKey=${SPOONACULAR_KEY}&tags=korean&number=12`
       );
       localStorage.setItem("korean", JSON.stringify(data.recipes));
       setKorean(data.recipes);
@@ -36,10 +36,11 @@ function Korean() {
       <Splide
         options={{
           perPage: 3,
-          arrows: false,
+          arrows: true,
           pagination: false,
           drag: "free",
           gap: "2rem",
+          padding: { left: "1.5rem", right: "1.5rem" },
         }}
       >
         {korean.map((recipe) => {
@@ -49,6 +50,9 @@ function Korean() {
                 title={recipe.title}
                 image={recipe.image}
                 id={recipe.id}
+                tag={"spoon"}
+                // saveRecipe={props.saveRecipe}
+                // isSaved={props.savedRecipes.includes(recipe.id) ? true : false}
               />
             </SplideSlide>
           );

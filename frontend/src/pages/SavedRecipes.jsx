@@ -2,9 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { NavLink, useNavigate } from "react-router-dom";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { useCookies } from "react-cookie";
+import { Link, useParams } from "react-router-dom";
+import { RxCross2 } from "react-icons/rx";
 
 import RecipeCard from "../components/RecipeCard";
 import { useGetUserId } from "../hooks/useGetUserId";
@@ -13,20 +12,19 @@ const nativeApi = axios.create({
   baseURL: "http://localhost:3001",
 });
 
-function MyRecipes() {
-  const [myRecipes, setMyRecipes] = useState([]);
-  const [cookies, _] = useCookies(["access_token"]);
+function SavedRecipes() {
+  const [savedRecipes, setSavedRecipes] = useState([]);
   const userId = useGetUserId();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    getMyRecipes();
-  }, [myRecipes]);
+    getSavedRecipes();
+  }, [savedRecipes]);
 
-  const getMyRecipes = async () => {
+  const getSavedRecipes = async () => {
     try {
-      const { data } = await nativeApi.get(`/myrecipes/${userId}`);
-      setMyRecipes(data.myRecipes);
+      const response = await nativeApi.get(`/savedrecipes/${userId}`);
+      console.log(response.data.savedRecipes);
+      setSavedRecipes(response.data.savedRecipes);
     } catch (error) {
       console.error(error);
     }
@@ -35,9 +33,12 @@ function MyRecipes() {
   const handleDelete = async (recipeId) => {
     console.log(recipeId);
     try {
-      const { data } = await nativeApi.delete(`/myrecipes/${recipeId}`);
+      const { data } = await nativeApi.put(`/savedrecipes/remove`, {
+        recipeId,
+        userId,
+      });
       console.log(data);
-      alert("Recipe deleted");
+      alert("Recipe removed");
     } catch (error) {
       console.error(error);
     }
@@ -50,27 +51,23 @@ function MyRecipes() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <h2>My Recipes</h2>
+      <h2>Saved Recipes</h2>
       <Grid>
-        {myRecipes.map((recipe) => {
+        {savedRecipes.map((recipe) => {
           return (
             <div>
               <Sidebar id="sidebar">
-                <EditButton to={`/editrecipe/${recipe._id}`}>
-                  <FaEdit />
-                </EditButton>
                 <DeleteButton onClick={() => handleDelete(recipe._id)}>
-                  <FaTrash />
+                  <RxCross2 />
                 </DeleteButton>
               </Sidebar>
-
               <RecipeCard
                 key={recipe._id}
                 title={recipe.title}
                 image={recipe.imageUrl}
                 id={recipe._id}
                 tag={"user"}
-              ></RecipeCard>
+              />
             </div>
           );
         })}
@@ -85,7 +82,7 @@ const Grid = styled.div`
     auto-fit,
     minmax(min(100%/3, max(64px, 100%/5)), 1fr)
   );
-  column-gap: 3rem;
+  column-gap: 2rem;
   row-gap: 1rem;
 `;
 
@@ -96,8 +93,8 @@ const Sidebar = styled.div`
   gap: 0.4rem;
 
   position: relative;
-  top: 0.3rem;
-  width: 3.5rem;
+  top: 0.4rem;
+  width: 2rem;
   height: 2rem;
   background: transparent;
   box-shadow: 2px -2px 2px #dddddd;
@@ -105,22 +102,13 @@ const Sidebar = styled.div`
   z-index: 3;
 `;
 
-const EditButton = styled(NavLink)`
-  border: none;
-  background: transparent;
-  svg {
-    color: #5f5f5f;
-    transform: scale(1);
-  }
-`;
-
 const DeleteButton = styled.button`
   border: none;
   background: transparent;
   svg {
     color: #5f5f5f;
-    transform: scale(1);
+    transform: scale(1.2);
   }
 `;
 
-export default MyRecipes;
+export default SavedRecipes;

@@ -9,25 +9,61 @@ const spoonApi = axios.create({
 });
 const SPOONACULAR_KEY = process.env.REACT_APP_SPOONACULAR_KEY;
 
+const nativeApi = axios.create({
+  baseURL: "http://localhost:3001",
+});
+
 function Recipe() {
-  const [details, setDetails] = useState([]);
+  const [details, setDetails] = useState({
+    title: "",
+    summary: "",
+    ingredients: [""],
+    instructions: [""],
+    image: "",
+    cookingTime: 0,
+  });
   const [activeTab, setActiveTab] = useState("instructions");
   let params = useParams();
 
   useEffect(() => {
+    console.log(params.tag);
     getDetails();
   }, [params.id]);
 
   const getDetails = async () => {
-    const check = localStorage.getItem(params.id);
-    if (check) {
-      setDetails(JSON.parse(check));
-    } else {
-      const { data } = await spoonApi.get(
-        `/${params.id}/information?apiKey=${SPOONACULAR_KEY}`
-      );
-      localStorage.setItem(params.id, JSON.stringify(data));
-      setDetails(data);
+    if (params.tag === "spoon") {
+      const check = localStorage.getItem(params.id);
+      if (check) {
+        setDetails(JSON.parse(check));
+      } else {
+        const { data } = await spoonApi.get(
+          `/${params.id}/information?apiKey=${SPOONACULAR_KEY}`
+        );
+        console.log(data);
+        const details = {
+          title: data.title,
+          summary: data.summary,
+          ingredients: data.extendedIngredients.map(
+            (ingredient) => ingredient.original
+          ),
+          instructions: data.instructions,
+          image: data.image,
+          cookingTime: data.cookingMinutes,
+        };
+        localStorage.setItem(params.id, JSON.stringify(data));
+        setDetails(details);
+      }
+    } else if (params.tag === "user") {
+      const { data } = await nativeApi.get(`/recipes/${params.id}`);
+      const details = {
+        title: data.recipe.title,
+        summary: data.recipe.description,
+        ingredients: data.recipe.ingredients,
+        instructions: data.recipe.instructions,
+        image: data.recipe.imageUrl,
+        cookingTime: data.recipe.cookingTime,
+      };
+      setDetails(details);
     }
   };
 
@@ -58,13 +94,23 @@ function Recipe() {
         {activeTab === "instructions" && (
           <div>
             <h3 dangerouslySetInnerHTML={{ __html: details.summary }}></h3>
-            <h3 dangerouslySetInnerHTML={{ __html: details.instructions }}></h3>
+            {params.tag === "spoon" ? (
+              <h3
+                dangerouslySetInnerHTML={{ __html: details.instructions }}
+              ></h3>
+            ) : (
+              <ul>
+                {details.instructions.map((instruction, idx) => (
+                  <li key={idx}>{instruction} </li>
+                ))}
+              </ul>
+            )}
           </div>
         )}
         {activeTab === "ingredients" && (
           <ul>
-            {details.extendedIngredients.map((ingredient) => (
-              <li key={ingredient.id}>{ingredient.original} </li>
+            {details.ingredients.map((ingredient, idx) => (
+              <li key={idx}>{ingredient} </li>
             ))}
           </ul>
         )}
@@ -95,6 +141,11 @@ const DetailWrapper = styled(motion.div)`
     background: linear-gradient(35deg, #494949, #313131);
     color: white;
   }
+  img {
+    aspect-ratio: 4/3;
+    width: 100%;
+    object-fit: cover;
+  }
 `;
 
 const Button = styled.button`
@@ -109,6 +160,7 @@ const Button = styled.button`
 
 const Info = styled.div`
   margin-left: 5rem;
+  min-width: 30%;
 `;
 
 export default Recipe;

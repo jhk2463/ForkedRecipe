@@ -25,7 +25,7 @@ function Cuisine() {
       setCuisine(JSON.parse(check));
     } else {
       const { data } = await spoonApi.get(
-        `/random?apiKey=${SPOONACULAR_KEY}&tags=${params.type}&number=9`
+        `/random?apiKey=${SPOONACULAR_KEY}&tags=${params.type}&number=12`
       );
       localStorage.setItem(params.type, JSON.stringify(data.recipes));
       setCuisine(data.recipes);
@@ -46,6 +46,7 @@ function Cuisine() {
             title={recipe.title}
             image={recipe.image}
             id={recipe.id}
+            tag={"spoon"}
           />
         );
       })}
@@ -55,7 +56,10 @@ function Cuisine() {
 
 const Grid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 2fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%/3, max(64px, 100%/5)), 1fr)
+  );
   column-gap: 2rem;
   row-gap: 1rem;
 `;

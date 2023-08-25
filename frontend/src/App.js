@@ -7,6 +7,8 @@ import Pages from "./pages/Pages";
 import Auth from "./pages/Auth";
 import Create from "./pages/Create";
 import MyRecipes from "./pages/MyRecipes";
+import SavedRecipes from "./pages/SavedRecipes";
+import Edit from "./pages/Edit";
 
 function App() {
   const [cookies, _] = useCookies(["access_token"]);
@@ -19,6 +21,8 @@ function App() {
           <Route path="/auth/*" element={<Auth />} />
           <Route path="/create" element={<Create />} />
           <Route path="/myrecipes" element={<MyRecipes />} />
+          <Route path="/savedrecipes" element={<SavedRecipes />} />
+          <Route path="/editrecipe/:recipeId" element={<Edit />} />
         </Routes>
       </BrowserRouter>
     </div>

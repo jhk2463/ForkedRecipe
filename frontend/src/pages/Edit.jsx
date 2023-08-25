@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { BsPlusCircleFill } from "react-icons/bs";
@@ -13,10 +13,11 @@ const nativeApi = axios.create({
   baseURL: "http://localhost:3001",
 });
 
-function Create() {
+function Edit() {
   const [cookies, _] = useCookies(["access_token"]);
   const userId = useGetUserId();
   const navigate = useNavigate();
+  let params = useParams();
 
   const [recipe, setRecipe] = useState({
     title: "",
@@ -27,6 +28,19 @@ function Create() {
     cookingTime: 0,
     owner: userId,
   });
+
+  useEffect(() => {
+    getRecipe();
+  }, []);
+
+  const getRecipe = async () => {
+    try {
+      const { data } = await nativeApi.get(`/recipes/${params.recipeId}`);
+      setRecipe(data.recipe);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -70,9 +84,12 @@ function Create() {
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await nativeApi.post("/myrecipes", recipe);
+      const response = await nativeApi.put(
+        `/myrecipes/${params.recipeId}`,
+        recipe
+      );
       console.log(response);
-      alert("Recipe created");
+      alert("Edit saved");
       navigate("/myrecipes");
     } catch (error) {
       console.error(error);
@@ -86,7 +103,7 @@ function Create() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <h2 style={{ marginLeft: "8.2%" }}>Create your recipe</h2>
+      <h2 style={{ marginLeft: "8.2%" }}>Edit your recipe</h2>
       <FormStyle id="form" onSubmit={onSubmit}>
         <LCol>
           <label htmlFor="title">Title</label>
@@ -163,7 +180,7 @@ function Create() {
         </RCol>
       </FormStyle>
       <SButton form="form" type="submit">
-        Create Recipe
+        Save
       </SButton>
     </motion.div>
   );
@@ -261,4 +278,4 @@ const SButton = styled.button`
   transform: translate(120%, 0);
 `;
 
-export default Create;
+export default Edit;
