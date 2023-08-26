@@ -8,22 +8,25 @@ import Korean from "../components/Korean";
 import { useGetUserId } from "../hooks/useGetUserId";
 import UserRecipes from "../components/UserRecipes";
 
-const nativeApi = axios.create({
-  baseURL: "http://localhost:3001",
-});
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function Home() {
   const [savedRecipes, setSavedRecipes] = useState([]);
   const [cookies, _] = useCookies(["access_token"]);
   const userId = useGetUserId();
+  const nativeApiPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    getSavedRecipes();
+    if (userId) {
+      getSavedRecipes();
+    }
   }, []);
 
   const getSavedRecipes = async () => {
     try {
-      const response = await nativeApi.get(`/savedrecipes/ids/${userId}`);
+      const response = await nativeApiPrivate.get(
+        `/savedrecipes/ids/${userId}`
+      );
       console.log(response.data.savedRecipes);
       setSavedRecipes(response.data.savedRecipes);
     } catch (error) {
@@ -34,7 +37,7 @@ function Home() {
   const saveRecipe = async (recipeId) => {
     console.log(recipeId);
     try {
-      const response = await nativeApi.put("/savedrecipes", {
+      const response = await nativeApiPrivate.put("/savedrecipes", {
         recipeId,
         userId,
       });
