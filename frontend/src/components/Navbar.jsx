@@ -5,16 +5,22 @@ import { useCookies } from "react-cookie";
 import { RiArrowDownSFill } from "react-icons/ri";
 
 import useAuth from "../hooks/useAuth";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function Navbar() {
   const [cookies, setCookies] = useCookies(["access_token"]);
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
+  const nativeApiPrivate = useAxiosPrivate();
 
   const logout = () => {
-    setCookies("access_token", "");
-    window.localStorage.removeItem("userId");
-    window.localStorage.removeItem("displayName");
+    try {
+      nativeApiPrivate.put(`/session`);
+      setAuth({});
+      alert("Logged out");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

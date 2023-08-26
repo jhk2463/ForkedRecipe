@@ -64,6 +64,8 @@ router.post("/session", async (req, res) => {
   //Send refresh token as an http only cookie
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true, //Not available to javascript (bit more secure)
+    sameSite: "None",
+    secure: true,
     maxAge: 24 * 60 * 60 * 1000, //1 day
   });
 
@@ -76,6 +78,35 @@ router.post("/session", async (req, res) => {
 });
 
 //Log out a user
+router.put("/session", async (req, res) => {
+  //Check if cookie contains refresh token
+  const cookies = req.cookies;
+  if (!cookies?.refreshToken) return res.sendStatus(204); //No content
+  const refreshToken = cookies.refreshToken;
+
+  //Check if there is user with matching refresh token
+  const user = await User.findOne({ refreshToken: refreshToken });
+  if (!user) {
+    //Simply clear cookie if there is no matching user
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
+    });
+    return res.sendStatus(204);
+  }
+
+  //Delete refresh token in the database & clear cookie
+  user.refreshToken = "";
+  await user.save();
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+  });
+
+  res.sendStatus(204);
+});
 
 //Refresh expired access token
 router.get("/token", async (req, res) => {
