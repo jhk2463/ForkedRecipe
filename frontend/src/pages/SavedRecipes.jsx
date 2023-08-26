@@ -22,7 +22,6 @@ function SavedRecipes() {
   const getSavedRecipes = async () => {
     try {
       const response = await nativeApiPrivate.get(`/savedrecipes/${userId}`);
-      console.log(response.data.savedRecipes);
       setSavedRecipes(response.data.savedRecipes);
     } catch (error) {
       console.error(error);
@@ -30,13 +29,12 @@ function SavedRecipes() {
   };
 
   const handleDelete = async (recipeId) => {
-    console.log(recipeId);
     try {
       const { data } = await nativeApiPrivate.put(`/savedrecipes/remove`, {
         recipeId,
         userId,
       });
-      console.log(data);
+      setSavedRecipes(data.savedRecipes);
       alert("Recipe removed");
     } catch (error) {
       console.error(error);

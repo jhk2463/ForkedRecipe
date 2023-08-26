@@ -21,9 +21,8 @@ function MyRecipes() {
 
   const getMyRecipes = async () => {
     try {
-      const { data } = await nativeApiPrivate.get(`/myrecipes/${userId}`);
-      console.log(data);
-      setMyRecipes(data.myRecipes);
+      const response = await nativeApiPrivate.get(`/myrecipes/${userId}`);
+      setMyRecipes(response.data.myRecipes);
     } catch (error) {
       console.error(error);
     }
@@ -32,8 +31,11 @@ function MyRecipes() {
   const handleDelete = async (recipeId) => {
     console.log(recipeId);
     try {
-      const { data } = await nativeApiPrivate.delete(`/myrecipes/${recipeId}`);
-      console.log(data);
+      const response = await nativeApiPrivate.put(`/myrecipes/delete`, {
+        recipeId,
+        userId,
+      });
+      setMyRecipes(response.data.myRecipes);
       alert("Recipe deleted");
     } catch (error) {
       console.error(error);

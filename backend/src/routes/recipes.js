@@ -67,6 +67,7 @@ router.put("/myrecipes/:recipeId", verifyToken, async (req, res) => {
       recipe,
       { new: true }
     );
+
     res.json(updatedRecipe);
   } catch (err) {
     res.json(err);
@@ -74,15 +75,25 @@ router.put("/myrecipes/:recipeId", verifyToken, async (req, res) => {
 });
 
 //Delete my recipe
-router.delete("/myrecipes/:recipeId", verifyToken, async (req, res) => {
-  console.log(req.params.recipeId);
+router.put("/myrecipes/delete", verifyToken, async (req, res) => {
+  const { recipeId, userId } = req.body;
   try {
-    const deletedRecipe = await Recipe.findByIdAndDelete(req.params.recipeId);
-    res.json(deletedRecipe);
-    console.log("success");
+    //Delete the recipe
+    await Recipe.findByIdAndDelete(recipeId);
+
+    //Remove recipe from user's myRecipes array
+    const user = await User.findById(userId);
+    const idx = user.myRecipes.indexOf(recipeId);
+    user.myRecipes.splice(idx, 1);
+    await user.save();
+
+    //Return recipe objects
+    const myRecipes = await Recipe.find({
+      _id: { $in: user.myRecipes },
+    });
+    res.json({ myRecipes: myRecipes });
   } catch (err) {
     res.json(err);
-    console.log("fail");
   }
 });
 
@@ -129,12 +140,17 @@ router.get("/savedrecipes/ids/:userId", verifyToken, async (req, res) => {
 router.put("/savedrecipes/remove", verifyToken, async (req, res) => {
   const { recipeId, userId } = req.body;
   try {
+    //Remove recipe from user's savedRecipes array
     const user = await User.findById(userId);
     const idx = user.savedRecipes.indexOf(recipeId);
     user.savedRecipes.splice(idx, 1);
     await user.save();
-    console.log(user.savedRecipes);
-    res.json({ savedRecipes: user.savedRecipes });
+
+    //Return recipe objects
+    const savedRecipes = await Recipe.find({
+      _id: { $in: user.savedRecipes },
+    });
+    res.json({ savedRecipes: savedRecipes });
   } catch (err) {
     res.json(err);
   }
