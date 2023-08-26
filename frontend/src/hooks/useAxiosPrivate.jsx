@@ -19,7 +19,7 @@ const useAxiosPrivate = () => {
       },
       (error) => Promise.reject(error)
     );
-
+    console.log("inside axios private");
     //If request fails due to an expired token, automatically refreshes the token and then tries the request again
     const responseIntercept = nativeApiPrivate.interceptors.response.use(
       (response) => response,
