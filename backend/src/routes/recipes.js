@@ -5,7 +5,7 @@ const router = express.Router();
 
 const Recipe = require("../models/Recipe");
 const User = require("../models/User");
-const verifyToken = require("./users").verifyToken;
+const verifyToken = require("../middleware/verifyToken");
 
 //Get all recipes
 router.get("/recipes", async (req, res) => {

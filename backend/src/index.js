@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
+var cookies = require("cookie-parser");
 
 const app = express();
 const PORT = process.env.port || 3001;
@@ -20,9 +21,10 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
+app.use(cookies());
 
 const recipeRoutes = require("./routes/recipes");
-const userRoutes = require("./routes/users").router;
+const userRoutes = require("./routes/users");
 
 app.use("/", userRoutes);
 app.use("/", recipeRoutes);

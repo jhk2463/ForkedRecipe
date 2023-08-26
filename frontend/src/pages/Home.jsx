@@ -27,7 +27,6 @@ function Home() {
       const response = await nativeApiPrivate.get(
         `/savedrecipes/ids/${userId}`
       );
-      console.log(response.data.savedRecipes);
       setSavedRecipes(response.data.savedRecipes);
     } catch (error) {
       console.error(error);

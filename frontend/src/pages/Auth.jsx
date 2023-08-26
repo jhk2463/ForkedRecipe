@@ -48,7 +48,7 @@ function Login() {
           withCredentials: true,
         }
       );
-      console.log(response.data);
+      console.log(response);
       const { userId, displayName, accessToken } = response.data;
       setAuth({ userId, displayName, accessToken });
       // setCookies("access_token", response.data.accessToken);

@@ -28,7 +28,7 @@ router.post("/users", async (req, res) => {
   res.json({ message: "User registered successfully" });
 });
 
-//Login a user
+//Log in a user
 router.post("/session", async (req, res) => {
   const { email, password } = req.body;
 
@@ -48,7 +48,7 @@ router.post("/session", async (req, res) => {
   const accessToken = jwt.sign(
     { userId: user._id },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "10s" }
   );
 
   //Create a refresh token for user
@@ -57,29 +57,53 @@ router.post("/session", async (req, res) => {
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: "1d" }
   );
+  //Save refresh token in users database
+  user.refreshToken = refreshToken;
+  await user.save();
+
+  //Send refresh token as an http only cookie
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true, //Not available to javascript (bit more secure)
+    maxAge: 24 * 60 * 60 * 1000, //1 day
+  });
+
+  //Send access token as json
   res.json({
     accessToken: accessToken,
-    refreshToken: refreshToken,
     userId: user._id,
     displayName: user.displayName,
   });
 });
 
-router.post("/token", (req, res) => {
-  const refreshToken = req.body.token;
+//Log out a user
+
+//Refresh expired access token
+router.get("/token", async (req, res) => {
+  //Check if cookie contains refresh token
+  const cookies = req.cookies;
+  if (!cookies?.refreshToken) return res.sendStatus(401);
+  const refreshToken = cookies.refreshToken;
+
+  //Check if there is user with matching refresh token
+  const user = await User.findOne({ refreshToken: refreshToken });
+  if (!user) return res.sendStatus(403);
+
+  //Verify the refresh token
+  jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET,
+    (err, decodedToken) => {
+      if (err || JSON.stringify(user._id) !== `"` + decodedToken.userId + `"`)
+        return res.sendStatus(403); //Invalid token
+      //Create a new access token for the user
+      const accessToken = jwt.sign(
+        { userId: decodedToken.userId },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "10s" }
+      );
+      res.json({ accessToken: accessToken });
+    }
+  );
 });
 
-//Authenticate token
-function verifyToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1]; //Getting token portion from "Bearer TOKEN"
-  if (token == null) return res.sendStatus(401);
-
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, userId) => {
-    if (err) return res.sendStatus(403);
-    req.userId = userId; //Adds userId to requests that uses this middleware
-    next();
-  });
-}
-
-module.exports = { verifyToken, router };
+module.exports = router;

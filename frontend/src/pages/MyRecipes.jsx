@@ -51,7 +51,7 @@ function MyRecipes() {
       <Grid>
         {myRecipes.map((recipe) => {
           return (
-            <div>
+            <div key={recipe._id}>
               <Sidebar id="sidebar">
                 <EditButton to={`/editrecipe/${recipe._id}`}>
                   <FaEdit />
@@ -62,7 +62,6 @@ function MyRecipes() {
               </Sidebar>
 
               <RecipeCard
-                key={recipe._id}
                 title={recipe.title}
                 image={recipe.imageUrl}
                 id={recipe._id}

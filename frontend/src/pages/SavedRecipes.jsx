@@ -54,14 +54,13 @@ function SavedRecipes() {
       <Grid>
         {savedRecipes.map((recipe) => {
           return (
-            <div>
+            <div key={recipe._id}>
               <Sidebar id="sidebar">
                 <DeleteButton onClick={() => handleDelete(recipe._id)}>
                   <RxCross2 />
                 </DeleteButton>
               </Sidebar>
               <RecipeCard
-                key={recipe._id}
                 title={recipe.title}
                 image={recipe.imageUrl}
                 id={recipe._id}
