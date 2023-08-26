@@ -21,12 +21,12 @@ function App() {
           <Route path="/auth/*" element={<Auth />} />
 
           {/*protected routes*/}
-          <Route element={<PersistLogin />}>
-            <Route path="/create" element={<Create />} />
-            <Route path="/editrecipe/:recipeId" element={<Edit />} />
-            <Route path="/myrecipes" element={<MyRecipes />} />
-            <Route path="/savedrecipes" element={<SavedRecipes />} />
-          </Route>
+          {/* <Route element={<PersistLogin />}> */}
+          <Route path="/create" element={<Create />} />
+          <Route path="/editrecipe/:recipeId" element={<Edit />} />
+          <Route path="/myrecipes" element={<MyRecipes />} />
+          <Route path="/savedrecipes" element={<SavedRecipes />} />
+          {/* </Route> */}
         </Routes>
       </BrowserRouter>
     </div>

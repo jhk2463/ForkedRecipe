@@ -50,10 +50,10 @@ function Login() {
       );
       console.log(response);
       const { userId, displayName, accessToken } = response.data;
-      setAuth({ userId, displayName, accessToken });
-      // setCookies("access_token", response.data.accessToken);
-      // window.localStorage.setItem("userId", response.data.userId);
-      // window.localStorage.setItem("displayName", response.data.displayName);
+      // setAuth({ userId, displayName, accessToken });
+      setCookies("access_token", response.data.accessToken);
+      window.localStorage.setItem("userId", response.data.userId);
+      window.localStorage.setItem("displayName", response.data.displayName);
       navigate("/");
     } catch (err) {
       console.error(err);
@@ -97,7 +97,6 @@ function Register() {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [_, setCookies] = useCookies(["access_token"]);
 
   const navigate = useNavigate();
 

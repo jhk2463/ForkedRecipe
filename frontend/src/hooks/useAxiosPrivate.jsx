@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 import { nativeApiPrivate } from "../apis/nativeApi";
 import useRefreshToken from "./useRefreshToken";
@@ -6,20 +7,20 @@ import useAuth from "./useAuth";
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
-  const { auth } = useAuth();
+  const [cookies, _] = useCookies(["access_token"]);
+  // const { auth } = useAuth();
 
   useEffect(() => {
     //Adds access token to initial request header
     const requestIntercept = nativeApiPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
+          config.headers["Authorization"] = `Bearer ${cookies.access_token}`;
         }
         return config;
       },
       (error) => Promise.reject(error)
     );
-    console.log("inside axios private");
     //If request fails due to an expired token, automatically refreshes the token and then tries the request again
     const responseIntercept = nativeApiPrivate.interceptors.response.use(
       (response) => response,
@@ -39,7 +40,7 @@ const useAxiosPrivate = () => {
       nativeApiPrivate.interceptors.response.eject(requestIntercept);
       nativeApiPrivate.interceptors.response.eject(responseIntercept);
     };
-  }, [auth, refresh]);
+  }, [cookies.access_token, refresh]);
   return nativeApiPrivate;
 };
 

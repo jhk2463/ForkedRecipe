@@ -9,14 +9,17 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function Navbar() {
   const [cookies, setCookies] = useCookies(["access_token"]);
-  const { auth, setAuth } = useAuth();
+  // const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
   const nativeApiPrivate = useAxiosPrivate();
 
   const logout = () => {
     try {
       nativeApiPrivate.put(`/session`);
-      setAuth({});
+      // setAuth({});
+      setCookies("access_token", "");
+      window.localStorage.removeItem("userId");
+      window.localStorage.removeItem("displayName");
       alert("Logged out");
     } catch (error) {
       console.error(error);
@@ -32,23 +35,23 @@ function Navbar() {
         </Logo>
 
         <Menu>
-          <SLink to={!auth.accessToken ? "/auth/login" : "/create"}>
+          <SLink to={!cookies.access_token ? "/auth/login" : "/create"}>
             Create Recipe
           </SLink>
-          <SLink to={!auth.accessToken ? "/auth/login" : "/myrecipes"}>
+          <SLink to={!cookies.access_token ? "/auth/login" : "/myrecipes"}>
             My Recipes
           </SLink>
-          <SLink to={!auth.accessToken ? "/auth/login" : "/savedrecipes"}>
+          <SLink to={!cookies.access_token ? "/auth/login" : "/savedrecipes"}>
             Saved Recipes
           </SLink>
         </Menu>
 
-        {!auth.accessToken ? (
+        {!cookies.access_token ? (
           <SLink to={"/auth/login"}>Login/Signup</SLink>
         ) : (
           <Dropdown>
             <SLink>
-              {auth.displayName}
+              {window.localStorage.getItem("displayName")}
               <RiArrowDownSFill />
             </SLink>
             <div>
