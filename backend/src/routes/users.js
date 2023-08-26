@@ -48,7 +48,7 @@ router.post("/session", async (req, res) => {
   const accessToken = jwt.sign(
     { userId: user._id },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "10s" }
+    { expiresIn: "15m" }
   );
 
   //Create a refresh token for user
@@ -130,7 +130,7 @@ router.get("/token", async (req, res) => {
       const accessToken = jwt.sign(
         { userId: decodedToken.userId },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "10s" }
+        { expiresIn: "15m" }
       );
       res.json({ accessToken: accessToken });
     }
