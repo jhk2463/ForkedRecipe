@@ -7,10 +7,22 @@ const app = express();
 const PORT = process.env.port || 3001;
 
 app.use(express.json());
-app.use(cors());
+const whitelist = ["http://localhost:3000"];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 const recipeRoutes = require("./routes/recipes");
-const userRoutes = require("./routes/users");
+const userRoutes = require("./routes/users").router;
 
 app.use("/", userRoutes);
 app.use("/", recipeRoutes);

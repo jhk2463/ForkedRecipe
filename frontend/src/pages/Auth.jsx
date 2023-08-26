@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import {
@@ -11,9 +10,8 @@ import {
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 
-const nativeApi = axios.create({
-  baseURL: "http://localhost:3001",
-});
+import useAuth from "../hooks/useAuth";
+import nativeApi from "../apis/nativeApi";
 
 function Auth() {
   const location = useLocation();
@@ -30,6 +28,7 @@ function Auth() {
 }
 
 function Login() {
+  const { setAuth } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [_, setCookies] = useCookies(["access_token"]);
@@ -39,13 +38,22 @@ function Login() {
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await nativeApi.post("/session", {
-        email,
-        password,
-      });
-      setCookies("access_token", response.data.token);
-      window.localStorage.setItem("userId", response.data.userId);
-      window.localStorage.setItem("displayName", response.data.displayName);
+      const response = await nativeApi.post(
+        "/session",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      const { userId, displayName, accessToken } = response.data;
+      setAuth({ userId, displayName, accessToken });
+      // setCookies("access_token", response.data.accessToken);
+      // window.localStorage.setItem("userId", response.data.userId);
+      // window.localStorage.setItem("displayName", response.data.displayName);
       navigate("/");
     } catch (err) {
       console.error(err);

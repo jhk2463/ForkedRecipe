@@ -4,8 +4,11 @@ import { GiKnifeFork } from "react-icons/gi";
 import { useCookies } from "react-cookie";
 import { RiArrowDownSFill } from "react-icons/ri";
 
+import useAuth from "../hooks/useAuth";
+
 function Navbar() {
   const [cookies, setCookies] = useCookies(["access_token"]);
+  const { auth } = useAuth();
   const navigate = useNavigate();
 
   const logout = () => {
@@ -23,23 +26,23 @@ function Navbar() {
         </Logo>
 
         <Menu>
-          <SLink to={!cookies.access_token ? "/auth/login" : "/create"}>
+          <SLink to={!auth.accessToken ? "/auth/login" : "/create"}>
             Create Recipe
           </SLink>
-          <SLink to={!cookies.access_token ? "/auth/login" : "/myrecipes"}>
+          <SLink to={!auth.accessToken ? "/auth/login" : "/myrecipes"}>
             My Recipes
           </SLink>
-          <SLink to={!cookies.access_token ? "/auth/login" : "/savedrecipes"}>
+          <SLink to={!auth.accessToken ? "/auth/login" : "/savedrecipes"}>
             Saved Recipes
           </SLink>
         </Menu>
 
-        {!cookies.access_token ? (
+        {!auth.accessToken ? (
           <SLink to={"/auth/login"}>Login/Signup</SLink>
         ) : (
           <Dropdown>
             <SLink>
-              {window.localStorage.getItem("displayName")}
+              {auth.displayName}
               <RiArrowDownSFill />
             </SLink>
             <div>

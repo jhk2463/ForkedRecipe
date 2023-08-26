@@ -14,7 +14,6 @@ function Popular(props) {
   const [popular, setPopular] = useState([]);
 
   useEffect(() => {
-    console.log(props.savedRecipes);
     getPopular();
   }, []);
 
@@ -28,7 +27,6 @@ function Popular(props) {
       );
       localStorage.setItem("popular", JSON.stringify(data.recipes));
       setPopular(data.recipes);
-      console.log(data.recipes);
     }
   };
 

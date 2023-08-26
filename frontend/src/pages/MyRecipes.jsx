@@ -8,24 +8,21 @@ import { useCookies } from "react-cookie";
 
 import RecipeCard from "../components/RecipeCard";
 import { useGetUserId } from "../hooks/useGetUserId";
-
-const nativeApi = axios.create({
-  baseURL: "http://localhost:3001",
-});
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function MyRecipes() {
   const [myRecipes, setMyRecipes] = useState([]);
-  const [cookies, _] = useCookies(["access_token"]);
   const userId = useGetUserId();
-  const navigate = useNavigate();
+  const nativeApiPrivate = useAxiosPrivate();
 
   useEffect(() => {
     getMyRecipes();
-  }, [myRecipes]);
+  }, []);
 
   const getMyRecipes = async () => {
     try {
-      const { data } = await nativeApi.get(`/myrecipes/${userId}`);
+      const { data } = await nativeApiPrivate.get(`/myrecipes/${userId}`);
+      console.log(data);
       setMyRecipes(data.myRecipes);
     } catch (error) {
       console.error(error);
@@ -35,7 +32,7 @@ function MyRecipes() {
   const handleDelete = async (recipeId) => {
     console.log(recipeId);
     try {
-      const { data } = await nativeApi.delete(`/myrecipes/${recipeId}`);
+      const { data } = await nativeApiPrivate.delete(`/myrecipes/${recipeId}`);
       console.log(data);
       alert("Recipe deleted");
     } catch (error) {

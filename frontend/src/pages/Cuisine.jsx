@@ -6,9 +6,7 @@ import { Link, useParams } from "react-router-dom";
 
 import RecipeCard from "../components/RecipeCard";
 
-const spoonApi = axios.create({
-  baseURL: "https://api.spoonacular.com/recipes",
-});
+import spoonApi from "../apis/spoonApi";
 const SPOONACULAR_KEY = process.env.REACT_APP_SPOONACULAR_KEY;
 
 function Cuisine() {

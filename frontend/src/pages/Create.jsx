@@ -8,15 +8,13 @@ import { BsPlusCircleFill } from "react-icons/bs";
 import { TiDeleteOutline } from "react-icons/ti";
 
 import { useGetUserId } from "../hooks/useGetUserId";
-
-const nativeApi = axios.create({
-  baseURL: "http://localhost:3001",
-});
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function Create() {
   const [cookies, _] = useCookies(["access_token"]);
   const userId = useGetUserId();
   const navigate = useNavigate();
+  const nativeApiPrivate = useAxiosPrivate();
 
   const [recipe, setRecipe] = useState({
     title: "",
@@ -70,7 +68,7 @@ function Create() {
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await nativeApi.post("/myrecipes", recipe);
+      const response = await nativeApiPrivate.post("/myrecipes", recipe);
       console.log(response);
       alert("Recipe created");
       navigate("/myrecipes");

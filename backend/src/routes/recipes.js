@@ -5,6 +5,7 @@ const router = express.Router();
 
 const Recipe = require("../models/Recipe");
 const User = require("../models/User");
+const verifyToken = require("./users").verifyToken;
 
 //Get all recipes
 router.get("/recipes", async (req, res) => {
@@ -27,12 +28,15 @@ router.get("/recipes/:recipeId", async (req, res) => {
 });
 
 //Get my recipes
-router.get("/myrecipes/:userId", async (req, res) => {
+router.get("/myrecipes/:userId", verifyToken, async (req, res) => {
   try {
+    console.log("reached");
     const user = await User.findById(req.params.userId);
+    console.log(user);
     const myRecipes = await Recipe.find({
       _id: { $in: user.myRecipes },
     });
+    console.log(myRecipes);
     res.json({ myRecipes: myRecipes });
   } catch (err) {
     res.json(err);
@@ -40,7 +44,7 @@ router.get("/myrecipes/:userId", async (req, res) => {
 });
 
 //Create a recipe
-router.post("/myrecipes", async (req, res) => {
+router.post("/myrecipes", verifyToken, async (req, res) => {
   const recipe = req.body;
   try {
     const user = await User.findById(recipe.owner);
@@ -55,7 +59,7 @@ router.post("/myrecipes", async (req, res) => {
 });
 
 //Edit my recipe
-router.put("/myrecipes/:recipeId", async (req, res) => {
+router.put("/myrecipes/:recipeId", verifyToken, async (req, res) => {
   const recipe = req.body;
   try {
     const updatedRecipe = await Recipe.findByIdAndUpdate(
@@ -70,7 +74,7 @@ router.put("/myrecipes/:recipeId", async (req, res) => {
 });
 
 //Delete my recipe
-router.delete("/myrecipes/:recipeId", async (req, res) => {
+router.delete("/myrecipes/:recipeId", verifyToken, async (req, res) => {
   console.log(req.params.recipeId);
   try {
     const deletedRecipe = await Recipe.findByIdAndDelete(req.params.recipeId);
@@ -83,7 +87,7 @@ router.delete("/myrecipes/:recipeId", async (req, res) => {
 });
 
 //Save a recipe
-router.put("/savedrecipes", async (req, res) => {
+router.put("/savedrecipes", verifyToken, async (req, res) => {
   const { recipeId, userId } = req.body;
   try {
     const recipe = await Recipe.findById(recipeId);
@@ -98,7 +102,7 @@ router.put("/savedrecipes", async (req, res) => {
 });
 
 //Get saved recipes (whole recipe objects)
-router.get("/savedrecipes/:userId", async (req, res) => {
+router.get("/savedrecipes/:userId", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     const savedRecipes = await Recipe.find({
@@ -112,7 +116,7 @@ router.get("/savedrecipes/:userId", async (req, res) => {
 });
 
 //Get saved recipes (just ids for reference)
-router.get("/savedrecipes/ids/:userId", async (req, res) => {
+router.get("/savedrecipes/ids/:userId", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     res.json({ savedRecipes: user?.savedRecipes });
@@ -122,7 +126,7 @@ router.get("/savedrecipes/ids/:userId", async (req, res) => {
 });
 
 //Remove a saved recipe
-router.put("/savedrecipes/remove", async (req, res) => {
+router.put("/savedrecipes/remove", verifyToken, async (req, res) => {
   const { recipeId, userId } = req.body;
   try {
     const user = await User.findById(userId);

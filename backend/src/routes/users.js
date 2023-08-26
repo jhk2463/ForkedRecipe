@@ -45,8 +45,41 @@ router.post("/session", async (req, res) => {
   }
 
   //Create user token for authentication
-  const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
-  res.json({ token, userId: user._id, displayName: user.displayName });
+  const accessToken = jwt.sign(
+    { userId: user._id },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "1h" }
+  );
+
+  //Create a refresh token for user
+  const refreshToken = jwt.sign(
+    { userId: user._id },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: "1d" }
+  );
+  res.json({
+    accessToken: accessToken,
+    refreshToken: refreshToken,
+    userId: user._id,
+    displayName: user.displayName,
+  });
 });
 
-module.exports = router;
+router.post("/token", (req, res) => {
+  const refreshToken = req.body.token;
+});
+
+//Authenticate token
+function verifyToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1]; //Getting token portion from "Bearer TOKEN"
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, userId) => {
+    if (err) return res.sendStatus(403);
+    req.userId = userId; //Adds userId to requests that uses this middleware
+    next();
+  });
+}
+
+module.exports = { verifyToken, router };

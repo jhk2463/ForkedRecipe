@@ -4,14 +4,10 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 
-const spoonApi = axios.create({
-  baseURL: "https://api.spoonacular.com/recipes",
-});
-const SPOONACULAR_KEY = process.env.REACT_APP_SPOONACULAR_KEY;
+import nativeApi from "../apis/nativeApi";
 
-const nativeApi = axios.create({
-  baseURL: "http://localhost:3001",
-});
+import spoonApi from "../apis/spoonApi";
+const SPOONACULAR_KEY = process.env.REACT_APP_SPOONACULAR_KEY;
 
 function Recipe() {
   const [details, setDetails] = useState({

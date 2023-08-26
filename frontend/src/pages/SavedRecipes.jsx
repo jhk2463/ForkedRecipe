@@ -8,21 +8,20 @@ import { RxCross2 } from "react-icons/rx";
 import RecipeCard from "../components/RecipeCard";
 import { useGetUserId } from "../hooks/useGetUserId";
 
-const nativeApi = axios.create({
-  baseURL: "http://localhost:3001",
-});
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function SavedRecipes() {
   const [savedRecipes, setSavedRecipes] = useState([]);
   const userId = useGetUserId();
+  const nativeApiPrivate = useAxiosPrivate();
 
   useEffect(() => {
     getSavedRecipes();
-  }, [savedRecipes]);
+  }, []);
 
   const getSavedRecipes = async () => {
     try {
-      const response = await nativeApi.get(`/savedrecipes/${userId}`);
+      const response = await nativeApiPrivate.get(`/savedrecipes/${userId}`);
       console.log(response.data.savedRecipes);
       setSavedRecipes(response.data.savedRecipes);
     } catch (error) {
@@ -33,7 +32,7 @@ function SavedRecipes() {
   const handleDelete = async (recipeId) => {
     console.log(recipeId);
     try {
-      const { data } = await nativeApi.put(`/savedrecipes/remove`, {
+      const { data } = await nativeApiPrivate.put(`/savedrecipes/remove`, {
         recipeId,
         userId,
       });

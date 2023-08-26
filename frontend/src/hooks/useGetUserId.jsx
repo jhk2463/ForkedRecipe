@@ -1,3 +1,6 @@
+import useAuth from "../hooks/useAuth";
+
 export const useGetUserId = () => {
-  return window.localStorage.getItem("userId");
+  const { auth } = useAuth();
+  return auth.userId;
 };
