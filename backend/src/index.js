@@ -8,7 +8,10 @@ const app = express();
 const PORT = process.env.port || 3001;
 
 app.use(express.json());
-const whitelist = ["http://localhost:3000"];
+const whitelist = [
+  "http://localhost:3000",
+  "https://forkedrecipebackend.onrender.com/",
+];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin)) {
