@@ -154,6 +154,7 @@ function Register() {
         email,
         password,
       });
+      alert("Registered successfully. Login to continue.");
       navigate("/login");
     } catch (err) {
       console.error(err);

@@ -95,11 +95,11 @@ function Recipe() {
                 dangerouslySetInnerHTML={{ __html: details.instructions }}
               ></h3>
             ) : (
-              <ul>
+              <ol>
                 {details.instructions.map((instruction, idx) => (
                   <li key={idx}>{instruction} </li>
                 ))}
-              </ul>
+              </ol>
             )}
           </div>
         )}
@@ -156,7 +156,7 @@ const Button = styled.button`
 
 const Info = styled.div`
   margin-left: 5rem;
-  min-width: 30%;
+  width: 100%;
 `;
 
 export default Recipe;

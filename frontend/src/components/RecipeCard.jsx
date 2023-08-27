@@ -15,6 +15,7 @@ function RecipeCard(props) {
 
 const Card = styled.div`
   aspect-ratio: 4/3;
+  max-width: 25rem;
 
   img {
     width: 100%;
