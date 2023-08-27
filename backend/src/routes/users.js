@@ -77,6 +77,53 @@ router.post("/session", async (req, res) => {
   });
 });
 
+//Sign in a user who used google authentication
+router.post("/google", async (req, res) => {
+  const { displayName, email } = req.body;
+
+  //Check if user exists, if not, create new user
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    user = await User.create({
+      displayName: displayName,
+      email: email,
+    });
+  }
+  console.log(user);
+
+  //Create user token for authentication
+  const accessToken = jwt.sign(
+    { userId: user._id },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "15m" }
+  );
+
+  //Create a refresh token for user
+  const refreshToken = jwt.sign(
+    { userId: user._id },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: "1d" }
+  );
+  //Save refresh token in users database
+  user.refreshToken = refreshToken;
+  await user.save();
+
+  //Send refresh token as an http only cookie
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true, //Not available to javascript (bit more secure)
+    sameSite: "None",
+    secure: true,
+    maxAge: 24 * 60 * 60 * 1000, //1 day
+  });
+
+  //Send access token as json
+  res.json({
+    accessToken: accessToken,
+    userId: user._id,
+    displayName: user.displayName,
+  });
+});
+
 //Log out a user
 router.put("/session", async (req, res) => {
   //Check if cookie contains refresh token

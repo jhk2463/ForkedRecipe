@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import {
   Link,
@@ -9,9 +9,11 @@ import {
 } from "react-router-dom";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import jwt_decode from "jwt-decode";
 
 import useAuth from "../hooks/useAuth";
 import nativeApi from "../apis/nativeApi";
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 function Auth() {
   const location = useLocation();
@@ -32,8 +34,48 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [_, setCookies] = useCookies(["access_token"]);
-
   const navigate = useNavigate();
+
+  //Google Login
+  const handleCallbackResponse = async (response) => {
+    // console.log("Encoded JWT ID token: " + response.credential);
+    let user = jwt_decode(response.credential);
+    console.log(user);
+    try {
+      const response = await nativeApi.post(
+        "/google",
+        {
+          displayName: user.given_name,
+          email: user.email,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+      const { userId, displayName, accessToken } = response.data;
+      setCookies("access_token", accessToken);
+      window.localStorage.setItem("userId", userId);
+      window.localStorage.setItem("displayName", displayName);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    /*global google*/
+    console.log(GOOGLE_CLIENT_ID);
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleCallbackResponse,
+    });
+
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "outline",
+      size: "large",
+    });
+  }, []);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -51,9 +93,9 @@ function Login() {
       console.log(response);
       const { userId, displayName, accessToken } = response.data;
       // setAuth({ userId, displayName, accessToken });
-      setCookies("access_token", response.data.accessToken);
-      window.localStorage.setItem("userId", response.data.userId);
-      window.localStorage.setItem("displayName", response.data.displayName);
+      setCookies("access_token", accessToken);
+      window.localStorage.setItem("userId", userId);
+      window.localStorage.setItem("displayName", displayName);
       navigate("/");
     } catch (err) {
       console.error(err);
@@ -69,7 +111,10 @@ function Login() {
     >
       <FormStyle onSubmit={onSubmit}>
         <h2>Log in</h2>
-
+        {/*Google sign in button*/}
+        <div id="signInDiv" />
+        <br></br>
+        <h4 style={{ textAlign: "center" }}>OR</h4>
         <label htmlFor="email">Email Address</label>
         <input
           type="text"
