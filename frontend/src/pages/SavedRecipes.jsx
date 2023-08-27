@@ -49,6 +49,7 @@ function SavedRecipes() {
       transition={{ duration: 0.2 }}
     >
       <h2>Saved Recipes</h2>
+      {savedRecipes.length === 0 && <h3>No saved recipes</h3>}
       <Grid>
         {savedRecipes.map((recipe) => {
           return (

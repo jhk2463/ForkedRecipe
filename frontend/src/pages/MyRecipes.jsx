@@ -23,6 +23,7 @@ function MyRecipes() {
     try {
       const response = await nativeApiPrivate.get(`/myrecipes/${userId}`);
       setMyRecipes(response.data.myRecipes);
+      console.log(response.data.myRecipes);
     } catch (error) {
       console.error(error);
     }
@@ -50,6 +51,7 @@ function MyRecipes() {
       transition={{ duration: 0.2 }}
     >
       <h2>My Recipes</h2>
+      {myRecipes.length === 0 && <h3>No recipes created</h3>}
       <Grid>
         {myRecipes.map((recipe) => {
           return (

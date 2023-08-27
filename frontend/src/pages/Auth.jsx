@@ -114,7 +114,8 @@ function Login() {
         {/*Google sign in button*/}
         <div id="signInDiv" />
         <br></br>
-        <h4 style={{ textAlign: "center" }}>OR</h4>
+        <h4 style={{ fontWeight: "bold" }}>OR</h4>
+
         <label htmlFor="email">Email Address</label>
         <input
           type="text"
