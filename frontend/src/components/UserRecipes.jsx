@@ -6,10 +6,7 @@ import styled from "styled-components";
 
 import GradientCard from "./GradientCard";
 import RecipeCard from "./RecipeCard";
-
-const nativeApi = axios.create({
-  baseURL: "http://localhost:3001",
-});
+import nativeApi from "../apis/nativeApi";
 
 function UserRecipes(props) {
   const [userRecipes, setUserRecipes] = useState([]);
