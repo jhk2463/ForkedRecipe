@@ -11,6 +11,7 @@ const verifyToken = require("../middleware/verifyToken");
 router.get("/recipes", async (req, res) => {
   try {
     const data = await Recipe.find({});
+    console.log(data);
     res.json(data);
   } catch (err) {
     res.json(err);

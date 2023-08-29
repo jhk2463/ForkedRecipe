@@ -17,8 +17,10 @@ function UserRecipes(props) {
 
   const getUserRecipes = async () => {
     try {
-      const { data } = await nativeApi.get(`/recipes`);
-      setUserRecipes(data);
+      console.log("getting");
+      const response = await nativeApi.get(`/recipes`);
+      setUserRecipes(response.data);
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
