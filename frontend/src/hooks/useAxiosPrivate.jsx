@@ -5,6 +5,7 @@ import { nativeApiPrivate } from "../apis/nativeApi";
 import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 
+//Version of axios where access tokens are sent with the request
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
   const [cookies, _] = useCookies(["access_token"]);

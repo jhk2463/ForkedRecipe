@@ -1,18 +1,14 @@
-import axios from "axios";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { useCookies } from "react-cookie";
 
 import Popular from "../components/Popular";
 import Korean from "../components/Korean";
-import { useGetUserId } from "../hooks/useGetUserId";
 import UserRecipes from "../components/UserRecipes";
-
+import { useGetUserId } from "../hooks/useGetUserId";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function Home() {
   const [savedRecipes, setSavedRecipes] = useState([]);
-  const [cookies, _] = useCookies(["access_token"]);
   const userId = useGetUserId();
   const nativeApiPrivate = useAxiosPrivate();
 
@@ -34,13 +30,11 @@ function Home() {
   };
 
   const saveRecipe = async (recipeId) => {
-    console.log(recipeId);
     try {
       const response = await nativeApiPrivate.put("/savedrecipes", {
         recipeId,
         userId,
       });
-      console.log(response.data.savedRecipes);
       setSavedRecipes(response.data.savedRecipes);
     } catch (error) {
       console.error(error);

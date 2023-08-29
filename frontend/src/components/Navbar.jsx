@@ -10,7 +10,6 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 function Navbar() {
   const [cookies, setCookies] = useCookies(["access_token"]);
   // const { auth, setAuth } = useAuth();
-  const navigate = useNavigate();
   const nativeApiPrivate = useAxiosPrivate();
 
   const logout = () => {

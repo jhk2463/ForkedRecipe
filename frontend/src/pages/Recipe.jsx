@@ -1,12 +1,11 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 
 import nativeApi from "../apis/nativeApi";
-
 import spoonApi from "../apis/spoonApi";
+
 const SPOONACULAR_KEY = process.env.REACT_APP_SPOONACULAR_KEY;
 
 function Recipe() {
@@ -22,7 +21,6 @@ function Recipe() {
   let params = useParams();
 
   useEffect(() => {
-    console.log(params.tag);
     getDetails();
   }, [params.id]);
 
@@ -35,7 +33,6 @@ function Recipe() {
         const { data } = await spoonApi.get(
           `/${params.id}/information?apiKey=${SPOONACULAR_KEY}`
         );
-        console.log(data);
         const details = {
           title: data.title,
           summary: data.summary,

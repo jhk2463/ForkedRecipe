@@ -1,13 +1,10 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { Link, useParams } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 
 import RecipeCard from "../components/RecipeCard";
 import { useGetUserId } from "../hooks/useGetUserId";
-
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function SavedRecipes() {

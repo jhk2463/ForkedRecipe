@@ -1,11 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
-import styled from "styled-components";
 
 import GradientCard from "./GradientCard";
-import RecipeCard from "./RecipeCard";
 import nativeApi from "../apis/nativeApi";
 
 function UserRecipes(props) {
@@ -17,10 +14,8 @@ function UserRecipes(props) {
 
   const getUserRecipes = async () => {
     try {
-      console.log("getting");
       const response = await nativeApi.get(`/recipes`);
       setUserRecipes(response.data);
-      console.log(response);
     } catch (error) {
       console.error(error);
     }

@@ -1,12 +1,11 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import RecipeCard from "../components/RecipeCard";
-
 import spoonApi from "../apis/spoonApi";
+
 const SPOONACULAR_KEY = process.env.REACT_APP_SPOONACULAR_KEY;
 
 function Cuisine() {

@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 
 import Navbar from "./components/Navbar";
-import PersistLogin from "./components/PersistLogin";
+// import PersistLogin from "./components/PersistLogin";
 
 import Pages from "./pages/Pages";
 import Auth from "./pages/Auth";

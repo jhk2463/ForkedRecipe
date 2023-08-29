@@ -2,7 +2,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { AiOutlineStar, AiFillStar, AiOutlineHeart } from "react-icons/ai";
-import { useState } from "react";
 
 function GradientCard(props) {
   const handleSave = () => {

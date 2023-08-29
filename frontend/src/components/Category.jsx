@@ -1,11 +1,9 @@
-import { FaPizzaSlice, FaHamburger } from "react-icons/fa";
-import { GiNoodles, GiChopsticks, GiTacos } from "react-icons/gi";
-import { BiSolidBowlRice, BiSolidSushi } from "react-icons/bi";
-import { MdTakeoutDining } from "react-icons/md";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-
-import React from "react";
+import { FaPizzaSlice, FaHamburger } from "react-icons/fa";
+import { GiNoodles, GiTacos } from "react-icons/gi";
+import { BiSolidBowlRice, BiSolidSushi } from "react-icons/bi";
+import { MdTakeoutDining } from "react-icons/md";
 
 function Category() {
   return (

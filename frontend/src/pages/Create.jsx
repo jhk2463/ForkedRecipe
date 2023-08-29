@@ -1,7 +1,5 @@
-import axios from "axios";
 import { useState } from "react";
-import { useCookies } from "react-cookie";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { BsPlusCircleFill } from "react-icons/bs";
@@ -11,7 +9,6 @@ import { useGetUserId } from "../hooks/useGetUserId";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function Create() {
-  const [cookies, _] = useCookies(["access_token"]);
   const userId = useGetUserId();
   const navigate = useNavigate();
   const nativeApiPrivate = useAxiosPrivate();
@@ -69,7 +66,6 @@ function Create() {
     event.preventDefault();
     try {
       const response = await nativeApiPrivate.post("/myrecipes", recipe);
-      console.log(response);
       alert("Recipe created");
       navigate("/myrecipes");
     } catch (error) {

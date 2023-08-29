@@ -13,6 +13,7 @@ import jwt_decode from "jwt-decode";
 
 import useAuth from "../hooks/useAuth";
 import nativeApi from "../apis/nativeApi";
+
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 function Auth() {
@@ -38,9 +39,7 @@ function Login() {
 
   //Google Login
   const handleCallbackResponse = async (response) => {
-    // console.log("Encoded JWT ID token: " + response.credential);
     let user = jwt_decode(response.credential);
-    console.log(user);
     try {
       const response = await nativeApi.post(
         "/google",
@@ -52,7 +51,6 @@ function Login() {
           withCredentials: true,
         }
       );
-      console.log(response);
       const { userId, displayName, accessToken } = response.data;
       setCookies("access_token", accessToken);
       window.localStorage.setItem("userId", userId);
@@ -65,18 +63,17 @@ function Login() {
 
   useEffect(() => {
     /*global google*/
-    console.log(GOOGLE_CLIENT_ID);
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: handleCallbackResponse,
     });
-
     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
       theme: "outline",
       size: "large",
     });
   }, []);
 
+  //Regular email and password login
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -90,7 +87,6 @@ function Login() {
           withCredentials: true,
         }
       );
-      console.log(response);
       const { userId, displayName, accessToken } = response.data;
       // setAuth({ userId, displayName, accessToken });
       setCookies("access_token", accessToken);

@@ -1,10 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { useCookies } from "react-cookie";
 
 import RecipeCard from "../components/RecipeCard";
 import { useGetUserId } from "../hooks/useGetUserId";
@@ -23,14 +21,12 @@ function MyRecipes() {
     try {
       const response = await nativeApiPrivate.get(`/myrecipes/${userId}`);
       setMyRecipes(response.data.myRecipes);
-      console.log(response.data.myRecipes);
     } catch (error) {
       console.error(error);
     }
   };
 
   const handleDelete = async (recipeId) => {
-    console.log(recipeId);
     try {
       const response = await nativeApiPrivate.put(`/myrecipes/delete`, {
         recipeId,

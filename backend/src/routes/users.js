@@ -173,7 +173,7 @@ router.get("/token", async (req, res) => {
     (err, decodedToken) => {
       if (err || JSON.stringify(user._id) !== `"` + decodedToken.userId + `"`)
         return res.sendStatus(403); //Invalid token
-      //Create a new access token for the user
+      //Create and send a new access token for the user
       const accessToken = jwt.sign(
         { userId: decodedToken.userId },
         process.env.ACCESS_TOKEN_SECRET,

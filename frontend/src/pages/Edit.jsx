@@ -1,6 +1,4 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
-import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
@@ -11,7 +9,6 @@ import { useGetUserId } from "../hooks/useGetUserId";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function Edit() {
-  const [cookies, _] = useCookies(["access_token"]);
   const userId = useGetUserId();
   const navigate = useNavigate();
   let params = useParams();
@@ -88,7 +85,6 @@ function Edit() {
         `/myrecipes/${params.recipeId}`,
         recipe
       );
-      console.log(response);
       alert("Edit saved");
       navigate("/myrecipes");
     } catch (error) {

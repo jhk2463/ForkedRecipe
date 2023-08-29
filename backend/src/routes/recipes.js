@@ -11,7 +11,6 @@ const verifyToken = require("../middleware/verifyToken");
 router.get("/recipes", async (req, res) => {
   try {
     const data = await Recipe.find({});
-    console.log(data);
     res.json(data);
   } catch (err) {
     res.json(err);
@@ -31,13 +30,10 @@ router.get("/recipes/:recipeId", async (req, res) => {
 //Get my recipes
 router.get("/myrecipes/:userId", verifyToken, async (req, res) => {
   try {
-    console.log("reached");
     const user = await User.findById(req.params.userId);
-    console.log(user);
     const myRecipes = await Recipe.find({
       _id: { $in: user.myRecipes },
     });
-    console.log(myRecipes);
     res.json({ myRecipes: myRecipes });
   } catch (err) {
     res.json(err);
@@ -68,7 +64,6 @@ router.put("/myrecipes/:recipeId", verifyToken, async (req, res) => {
       recipe,
       { new: true }
     );
-
     res.json(updatedRecipe);
   } catch (err) {
     res.json(err);
@@ -106,7 +101,6 @@ router.put("/savedrecipes", verifyToken, async (req, res) => {
     const user = await User.findById(userId);
     user.savedRecipes.push(recipeId);
     await user.save();
-    console.log(user.savedRecipes);
     res.json({ savedRecipes: user.savedRecipes });
   } catch (err) {
     res.json(err);
@@ -120,7 +114,6 @@ router.get("/savedrecipes/:userId", verifyToken, async (req, res) => {
     const savedRecipes = await Recipe.find({
       _id: { $in: user.savedRecipes },
     });
-    console.log(savedRecipes);
     res.json({ savedRecipes: savedRecipes });
   } catch (err) {
     res.json(err);
