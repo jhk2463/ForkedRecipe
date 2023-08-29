@@ -10,20 +10,21 @@ const PORT = process.env.port || 3001;
 app.use(express.json());
 const whitelist = [
   "http://localhost:3000",
-  "https://forkedrecipebackend.onrender.com/",
+  "https://main--gentle-toffee-361c40.netlify.app/",
 ];
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (whitelist.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  // origin: (origin, callback) => {
+  //   if (whitelist.includes(origin)) {
+  //     callback(null, true);
+  //   } else {
+  //     callback(new Error("Not allowed by CORS"));
+  //   }
+  // },
+  origin: true,
   credentials: true,
   optionsSuccessStatus: 200,
 };
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(cookies());
 
 const recipeRoutes = require("./routes/recipes");
