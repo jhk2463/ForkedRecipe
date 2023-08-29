@@ -6,6 +6,7 @@ Link: https://forkedrecipe.netlify.app/ (May take up to a minute for backend ser
 Use test account if you wish:
 <br>
 Email: test@gmail.com
+<br>
 Password: test123
 
 ## Major Takeaways
